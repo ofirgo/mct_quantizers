@@ -24,7 +24,6 @@ jobs:
           python-version: ${{  inputs.python_version  }}
       - name: Install dependencies
         run: |
-          git checkout tags/${{  inputs.mct_quantizers_version  }}
           pip install -r requirements.txt
           pip install tensorflow tensorflow-model-optimization
       - name: Build WHL file
