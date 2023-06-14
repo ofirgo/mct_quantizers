@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install tensorflow tensorflow-model-optimization
           pip install torch torchvision
       - name: Build WHL file
         run: |
