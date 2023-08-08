@@ -31,7 +31,8 @@ jobs:
           git checkout tags/${{  inputs.save_version  }}
       - name: Run save model tests
         run: |
-          cd tests/keras_tests/compatibility_tests
+          echo "$PWD"
+
           python compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
       - name: Install checkout to load model tests version (latest)
         run: |
