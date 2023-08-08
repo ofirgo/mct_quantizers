@@ -27,6 +27,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install tensorflow==2.12.*
+          
+          
       #- name: Install MCT Quantizers package in requested save model tests version
         # run: |
           # git checkout tags/${{  inputs.save_version  }}
@@ -34,10 +36,12 @@ jobs:
           # pip install mct-quantizers==${{  inputs.save_version  }}
       - name: Run save model tests
         run: |
-          cd tests/keras_tests/compatibility_tests
-          # python tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
-          python compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
-          # python -m unittest discover tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{  inputs.save_version  }} --verbose &
+          cd tests
+          echo "Current directory: $PWD"
+          export PYTHONPATH="$PWD:${PYTHONPATH}"
+          echo "Updated PYTHONPATH: $PYTHONPATH"
+          cd ..
+          python tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
       #- name: Remove MCT Quantizers package
         # run: |
           # pip uninstall mct-quantizers
