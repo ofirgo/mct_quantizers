@@ -9,6 +9,7 @@ on:
         description: 'MCT Quantizers version to save models'
         required: true
         type: string
+        default: 'v1.1.0'
 
 jobs:
   run-tensorflow-tests:
