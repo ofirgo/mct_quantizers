@@ -32,7 +32,7 @@ jobs:
           git checkout tags/${{  inputs.save_version  }}
           rm -rf mct_quantizers
           pip install mct-quantizers==${{  inputs.save_version  }}
-          ls -l .
+          ls -l tests/keras_tests
       - name: Run save model tests
         run: |
           cd tests
