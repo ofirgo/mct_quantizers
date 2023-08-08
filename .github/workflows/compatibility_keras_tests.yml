@@ -48,5 +48,10 @@ jobs:
           # git checkout .
       - name: Run load model tests with latest version
         run: |
+          cd tests
+          echo "Current directory: $PWD"
+          export PYTHONPATH="$PWD:${PYTHONPATH}"
+          echo "Updated PYTHONPATH: $PYTHONPATH"
+          cd ..
           python tests/keras_tests/compatibility_tests/compatibility_load_model_test_suite.py ${{  inputs.save_version  }}
       
