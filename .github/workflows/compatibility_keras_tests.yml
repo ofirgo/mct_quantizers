@@ -31,8 +31,13 @@ jobs:
           git checkout tags/${{  inputs.save_version  }}
       - name: Run save model tests
         run: |
-          echo "$PWD"
-
+          ls -l .
+          cd tests
+          ls -l .
+          cd keras_tests
+          ls -l .
+          cd compatibility_tests
+          ls -l .
           python compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
       - name: Install checkout to load model tests version (latest)
         run: |
