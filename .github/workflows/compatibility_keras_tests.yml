@@ -5,12 +5,8 @@ on:
     schedule:
       - cron: 0 0 * * *
     inputs:
-      save-version:
+      save_version:
         description: 'MCT Quantizers version to save models'
-        required: true
-        type: string
-      load-version:
-        description: 'MCT Quantizers version to load models'
         required: true
         type: string
 
@@ -29,14 +25,14 @@ jobs:
           pip install tensorflow==2.12.*
       - name: Install checkout to save model tests version
         run: |
-          git checkout tags/${{ inputs.save-version }}
+          git checkout tags/${{  inputs.save_version  }}
       - name: Run save model tests
         run: |
-          python tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{ inputs.save-version }}
-      - name: Install checkout to load model tests version
+          python tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
+      - name: Install checkout to load model tests version (latest)
         run: |
-          git checkout tags/${{ inputs.load-version }}
+          git checkout main
       - name: Run load model tests
         run: |
-          python tests/keras_tests/compatibility_tests/compatibility_load_model_test_suite.py ${{ inputs.save-version }}
+          python tests/keras_tests/compatibility_tests/compatibility_load_model_test_suite.py ${{  inputs.save_version  }}
       
