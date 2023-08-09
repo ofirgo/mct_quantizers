@@ -1,4 +1,4 @@
-name: Run Keras Compatibility Tests
+name: Run Keras Weights Quantizers Compatibility Tests
 
 on:
   workflow_dispatch: # Allow manual triggers
@@ -9,7 +9,6 @@ on:
         description: 'MCT Quantizers version to save models'
         required: true
         type: string
-        default: 'v1.1.0'
 
 jobs:
   run-tensorflow-tests:
@@ -27,12 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install tensorflow==2.12.*
-      - name: Install MCT Quantizers package in requested save model tests version
+      - name: Checkout to MCT Quantizers requested tag for saving test models
         run: |
           git checkout tags/${{  inputs.save_version  }}
-          rm -rf mct_quantizers
-          pip install mct-quantizers==${{  inputs.save_version  }}
-          ls -l tests/keras_tests
       - name: Run save model tests
         run: |
           cd tests
@@ -41,11 +37,9 @@ jobs:
           echo "Updated PYTHONPATH: $PYTHONPATH"
           cd ..
           python tests/keras_tests/compatibility_tests/compatibility_save_model_test_suite.py ${{  inputs.save_version  }}
-      - name: Remove MCT Quantizers package
+      - name: Checkout to MCT Quantizers latest version
         run: |
-          pip uninstall mct-quantizers
-          git checkout .
-          ls -l .
+          git checkout main
       - name: Run load model tests with latest version
         run: |
           cd tests
@@ -54,4 +48,3 @@ jobs:
           echo "Updated PYTHONPATH: $PYTHONPATH"
           cd ..
           python tests/keras_tests/compatibility_tests/compatibility_load_model_test_suite.py ${{  inputs.save_version  }}
-      
