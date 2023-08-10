@@ -40,6 +40,7 @@ if FOUND_TF:
         Returns: A keras Model
 
         """
+        print("############ TESTTTTTT ###########")
         qi_inferable_custom_objects = {subclass.__name__: subclass for subclass in
                                        get_all_subclasses(BaseKerasInferableQuantizer)}
         all_inferable_names = list(qi_inferable_custom_objects.keys())

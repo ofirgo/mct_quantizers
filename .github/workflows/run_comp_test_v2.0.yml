@@ -1,0 +1,11 @@
+name: Run Tests - Keras Compatibility v2.0
+on:
+  workflow_dispatch: # Allow manual triggers
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  run-tensorflow-2_11:
+    uses: ./.github/workflows/compatibility_keras_tests.yml
+    with:
+      save_version: "test-2.0"
