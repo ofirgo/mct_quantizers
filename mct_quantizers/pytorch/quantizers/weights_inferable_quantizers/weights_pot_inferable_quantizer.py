@@ -41,6 +41,7 @@ if FOUND_TORCH:
                      num_bits: int,
                      threshold: List[float],
                      per_channel: bool,
+                     test: int,
                      channel_axis: int = None,
                      ):
 
@@ -62,6 +63,7 @@ if FOUND_TORCH:
             self.threshold = threshold
             self.per_channel = per_channel
             self.channel_axis = channel_axis
+            self.test = test
 
             is_threshold_pot = np.all(
                 np.round(np.log2(self.threshold_np.flatten())) == np.log2(self.threshold_np.flatten()))
@@ -83,7 +85,8 @@ if FOUND_TORCH:
                                          self.num_bits,
                                          self.threshold_np,
                                          self.per_channel,
-                                         self.channel_axis)
+                                         self.channel_axis,
+                                         self.test)
 
             return super(WeightsPOTInferableQuantizer, self).__call__(inputs)
 
@@ -96,7 +99,7 @@ if FOUND_TORCH:
         """
 
         @staticmethod
-        def forward(ctx, input_tensor, num_bits, threshold, per_channel, channel_axis):
+        def forward(ctx, input_tensor, num_bits, threshold, per_channel, channel_axis, test):
             """
              Forward computation function. This method performs the forward computation using
              the given quantize_sym_weights_torch function.
@@ -112,10 +115,10 @@ if FOUND_TORCH:
              Returns:
                  The quantized tensor.
              """
-            return quantize_sym_weights_torch(input_tensor, num_bits, threshold, per_channel, channel_axis)
+            return quantize_sym_weights_torch(input_tensor, num_bits, threshold, per_channel, channel_axis, test)
 
         @staticmethod
-        def symbolic(g, input_tensor, num_bits, threshold, per_channel, channel_axis):
+        def symbolic(g, input_tensor, num_bits, threshold, per_channel, channel_axis, test):
             """
             Symbolic method that defines the custom operation for ONNX export.
 
@@ -142,6 +145,7 @@ if FOUND_TORCH:
                         per_channel_i=int(per_channel),
                         channel_axis_i=channel_axis,
                         signed_i=int(WeightsPOTF.is_signed()),
+                        test_i=int(test),
                         **WeightsPOTF._get_metadata_attributes()
                         ).setType(
                 input_tensor.type())
@@ -170,6 +174,7 @@ if FOUND_ONNXRUNTIME_EXTENSIONS:
                  "num_bits": PyCustomOpDef.dt_int64,
                  "per_channel": PyCustomOpDef.dt_int64,
                  "channel_axis": PyCustomOpDef.dt_int64,
+                 "test": PyCustomOpDef.dt_int64,
              }
              )
     def weight_pot_ort(input_tensor: np.ndarray, threshold: np.ndarray, **kwargs):
@@ -177,4 +182,5 @@ if FOUND_ONNXRUNTIME_EXTENSIONS:
                                           kwargs["num_bits"],
                                           threshold,
                                           kwargs["per_channel"],
-                                          kwargs["channel_axis"])
+                                          kwargs["channel_axis"],
+                                          kwargs['test'])

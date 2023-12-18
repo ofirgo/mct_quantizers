@@ -33,7 +33,8 @@ if FOUND_TORCH:
                                    num_bits: int,
                                    threshold: float,
                                    per_channel: bool,
-                                   channel_axis: int):
+                                   channel_axis: int,
+                                   test: int):
         """
            Quantizes the input tensor symmetrically using torch.
 
